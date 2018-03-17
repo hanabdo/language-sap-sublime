@@ -6,7 +6,7 @@ file_extensions:
   - hdbsequence
 
 variables:
-  keywords: 'cycles|depends_on_table|increment_by|minvalue|schema|start_with'
+  keywords: 'cycles|depends_on_table|increment_by|minvalue|reset_by|schema|start_with'
 
 contexts:
   main:
