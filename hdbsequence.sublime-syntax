@@ -12,6 +12,10 @@ contexts:
   main:
     - include: line_comment
     - include: string_literal
+    - match: '\b(true|false)\b'
+      scope: constant.boolean.hdbdd
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric.hdbdd
     - match: '\b({{keywords}})\b'
       scope: keyword.operator.misc.hdbsequence
       pop: true
