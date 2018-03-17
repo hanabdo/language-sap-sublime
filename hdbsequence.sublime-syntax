@@ -1,0 +1,38 @@
+%YAML 1.2
+---
+name: hdbsequence
+scope: source.hdbsequence
+file_extensions:
+  - hdbsequence
+
+variables:
+  keywords: 'cycles|depends_on_table|increment_by|minvalue|schema|start_with'
+
+contexts:
+  main:
+    - include: line_comment
+    - include: string_literal
+    - match: '\b({{keywords}})\b'
+      scope: keyword.operator.misc.hdbsequence
+      pop: true
+
+  line_comment:
+    - match: '//'
+      scope: punctuation.definition.comment.hdsequence
+      push: line_comment
+    - meta_scope: comment.line.hdsequence
+    - match: $
+      pop: true
+
+  string_literal:
+    - match: '"'
+      scope: punctuation.definition.string.begin.hdsequence
+      push: string_literal_end
+
+  string_literal_end:
+    - meta_scope: string.quoted.double.hdsequence
+    - match: '\\.'
+      scope: constant.character.escape.hdsequence
+    - match: '"'
+      scope: punctuation.definition.string.end.hdsequence
+      pop: true

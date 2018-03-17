@@ -1,0 +1,47 @@
+%YAML 1.2
+---
+name: hdbview
+scope: source.hdbview
+file_extensions:
+  - hdbview
+
+variables:
+  keywords: 'schema|query|depends_on'
+
+contexts:
+  main:
+    - include: block_comment
+    - include: line_comment
+    - include: string_literal
+    - match: '\b({{keywords}})\b'
+      scope: keyword.operator.misc.hdbview
+      pop: true
+
+  block_comment:
+    - match: '/\*'
+      scope: punctuation.definition.comment.hdview
+      push: block_comment
+    - meta_scope: comment.line.hdview
+    - match: '.*\*/'
+      pop: true
+
+  line_comment:
+    - match: '//'
+      scope: punctuation.definition.comment.hdview
+      push: line_comment
+    - meta_scope: comment.line.hdview
+    - match: $
+      pop: true
+
+  string_literal:
+    - match: '"'
+      scope: punctuation.definition.string.begin.hdview
+      push: string_literal_end
+
+  string_literal_end:
+    - meta_scope: string.quoted.double.hdview
+    - match: '\\.'
+      scope: constant.character.escape.hdview
+    - match: '"'
+      scope: punctuation.definition.string.end.hdview
+      pop: true

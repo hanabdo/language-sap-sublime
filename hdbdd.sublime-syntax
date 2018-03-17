@@ -1,9 +1,9 @@
 %YAML 1.2
 ---
-# See http://www.sublimetext.com/docs/3/syntax.html
+name: hdbdd
+scope: source.hdbdd
 file_extensions:
   - hdbdd
-scope: source.hdbdd
 
 variables:
   other_keywords: 'annotation|aspect|const|context|define|entity|key|namespace|role|type|using|view'
@@ -16,9 +16,7 @@ contexts:
   main:
     - include: block_comment
     - include: line_comment
-
-    - match: '\b(if|else|for|while)\b'
-      scope: keyword.control.hdbdd
+    - include: string_literal
 
     - match: '\b(-)?[0-9.]+\b'
       scope: constant.numeric.hdbdd
@@ -40,10 +38,6 @@ contexts:
       scope: keyword.other.DML.hdbdd
       pop: true
 
-    - match: '"'
-      scope: punctuation.definition.string.begin.hdbdd
-      push: string_literal
-
   block_comment:
     - match: '/\*'
       scope: punctuation.definition.comment.hdbdd
@@ -61,6 +55,11 @@ contexts:
       pop: true
 
   string_literal:
+    - match: '"'
+      scope: punctuation.definition.string.begin.hdbdd
+      push: string_literal_end
+
+  string_literal_end:
     - meta_scope: string.quoted.double.hdbdd
     - match: '\\.'
       scope: constant.character.escape.hdbdd
