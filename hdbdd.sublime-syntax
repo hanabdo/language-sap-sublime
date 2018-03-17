@@ -1,0 +1,69 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - hdbdd
+scope: source.hdbdd
+
+variables:
+  other_keywords: 'annotation|aspect|const|context|define|entity|key|namespace|role|type|using|view'
+  data_types: 'Binary|BinaryFloat|Boolean|Decimal|DecimalFloat|Integer|Integer64|LargeBinary|LargeString|LocalDate|LocalTime|String|UTCDateTime|UTCTimestamp'
+  annotation_parameters: 'ASC|COLUMN|DESC|GLOBAL_TEMPORARY|ROW'
+  annotations_withparams: 'Catalog.index|Catalog.tableType|Schema|GenerateTableType|SearchIndex.text|SearchIndex.fuzzy'
+  annotations_withnoparams: 'nokey|WithStructuredPrivilegeCheck'
+
+contexts:
+  main:
+    - include: block_comment
+    - include: line_comment
+
+    - match: '\b(if|else|for|while)\b'
+      scope: keyword.control.hdbdd
+
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric.hdbdd
+
+    - match: '^\s*@\b({{annotations_withparams}}|{{annotations_withnoparams}})\b'
+      scope: storage.type.hdbdd
+      pop: true
+
+    - match: '(:\s)(#\b({{annotation_parameters}})\b)'
+      captures:
+        2: storage.type.hdbdd
+      pop: true
+
+    - match: '\b({{data_types}})\b'
+      scope: storage.type.hdbdd
+      pop: true
+
+    - match: '\b({{other_keywords}})\b'
+      scope: keyword.other.DML.hdbdd
+      pop: true
+
+    - match: '"'
+      scope: punctuation.definition.string.begin.hdbdd
+      push: string_literal
+
+  block_comment:
+    - match: '/\*'
+      scope: punctuation.definition.comment.hdbdd
+      push: block_comment
+    - meta_scope: comment.line.hdbdd
+    - match: '.*\*/'
+      pop: true
+
+  line_comment:
+    - match: '//'
+      scope: punctuation.definition.comment.hdbdd
+      push: line_comment
+    - meta_scope: comment.line.hdbdd
+    - match: $
+      pop: true
+
+  string_literal:
+    - meta_scope: string.quoted.double.hdbdd
+    - match: '\\.'
+      scope: constant.character.escape.hdbdd
+    - match: '"'
+      scope: punctuation.definition.string.end.hdbdd
+      pop: true
